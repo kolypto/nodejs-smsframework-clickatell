@@ -1,0 +1,38 @@
+{
+  "name": "smsframework-clickatell",
+  "description": "SMS framework: Clickatell provider",
+  "version": "0.0.1",
+  
+  "author": "kolypto <kolypto@gmail.com>",
+  "license": "MIT",
+  "maintainers": [
+    "kolypto <kolypto@gmail.com>"
+  ],
+  "repository": {
+    "type": "git",
+    "url": "git@github.com:kolypto/nodejs-smsframework-clickatell.git"
+  },
+  
+  "main": "./lib/index",
+  "keywords": [
+    "sms",
+    "smsframework",
+    "clickatell"
+  ],
+  
+  "dependencies": {
+    "q": "0.9.x",
+    "lodash": "2.4.x",
+    "request": "2.30.x"
+  },
+  "devDependencies": {
+    "nodeunit": "0.8.2"
+  },
+  "engines": {
+    "node": ">= 0.9.0"
+  },
+  
+  "scripts": {
+    "test": "./node_modules/.bin/nodeunit tests/*-test.js"
+  }
+}
