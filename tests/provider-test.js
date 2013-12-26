@@ -6,7 +6,10 @@ var Q = require('q'),
     provider = require('../') // register the provider
     ;
 
-exports.testClickatell = function(test){
+/** Test Provider
+ * @param {test|deepEqual} test
+ */
+exports.testProvider = function(test){
     var gw = new smsfw.Gateway();
     gw.addProvider('clickatell', 'main', { api_id: 1, user: 'kolypto', pass: '123',  _hostname: 'localhost:80' });
     gw.addProvider('clickatell', 'err',  { api_id: 1, user: 'invalid', pass: 'zzz',  _hostname: 'localhost:80' });
@@ -16,7 +19,7 @@ exports.testClickatell = function(test){
         gw.addProvider('clickatell', 'main', {});
     }, Error);
 
-    console.log(gw.getProvider('main').api.);
+    // TODO: unit-tests!
 
     test.done();
 };
