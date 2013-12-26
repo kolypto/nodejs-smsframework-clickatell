@@ -19,8 +19,13 @@ Initialization
 ==============
 
 ```js
-var gw = new smsframework.Gateway();
-gw.addProvider('clickatell', 'main', { api_id: 1, user: 'kolypto', pass: '123', https: false });
+var gateway = new smsframework.Gateway();
+gateway.addProvider('clickatell', 'main', {
+    api_id: 1,
+    user: 'kolypto',
+    pass: '123',
+    https: false
+});
 ```
 
 Config
@@ -102,6 +107,17 @@ MessageStatus.info
 
 
 
-Notes
-=====
+Public API
+==========
+
+getBalance
+----------
+Returns the credist left on the account:
+
+```js
+gateway.getProvider('main').getBalance()
+    .then(function(credits){
+        console.log('Account balance:', credits);
+    }).done();
+```
 
