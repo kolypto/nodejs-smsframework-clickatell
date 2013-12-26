@@ -28,6 +28,7 @@
   },
   "devDependencies": {
     "smsframework": "0.0.x",
+    "express": "3.4.7",
     "nodeunit": "0.8.2"
   },
   "engines": {

@@ -4,7 +4,8 @@ var request = require('request'),
     Q = require('q'),
     _ = require('lodash'),
     smsfw = require('smsframework'),
-    provider = require('../') // register the provider
+    provider = require('../'), // register the provider
+    common = require('./common')
     ;
 
 /** Test Provider
@@ -23,6 +24,40 @@ exports.testProvider = function(test){
     // Test
     var server, url;
     [
+        // Test Provider API
+        function(){
+            var server;
+            return smsfw.Gateway._listenExpress(common.clickatellApiSimulator(), [0, 'localhost'])
+                .then(function(srv){
+                    gw.addProvider('clickatell', 'sim', { api_id: 1, user: 'kolypto', pass: '123',  _hostname: 'localhost:'+srv.address().port });
+                    server = srv;
+                })
+                // Test: getBalance
+                .then(function(){
+                    return gw.getProvider('sim').getBalance()
+                        .then(function(balance){
+                            test.strictEqual(balance, 12.50);
+                        });
+                })
+                // Test: send message with error
+                .then(function(){
+                    return gw.message('+123', '').provider('sim').send() // empty message
+                        .then(function(){ test.ok(false, 'Should never'); })
+                        .catch(function(err){
+                            test.ok(err instanceof smsfw.errors.RequestError, err.stack);
+                        });
+                })
+                // Test: send message
+                .then(function(){
+                    return gw.message('+123', 'hi there').provider('sim').send()
+                        .then(function(message){
+                            test.ok(message instanceof smsfw.data.OutgoingMessage);
+                            test.strictEqual(message.msgid, '9cdfb439c7876e703e307864c9167a15');
+                        });
+                })
+                .finally(function(){ server && server.close(); })
+                ;
+        },
         // Test HTTP /im
         function(){
             var traffic = [];
@@ -58,6 +93,7 @@ exports.testProvider = function(test){
                 qs: qs
             }).spread(function(res, body){
                     test.strictEqual(res.statusCode, 200);
+                    test.strictEqual(body, 'OK');
                 }).then(function(){
                     test.equal(traffic.length, 1);
                     test.deepEqual(traffic[0], {
@@ -82,6 +118,7 @@ exports.testProvider = function(test){
                 qs: qs
             }).spread(function(res, body){
                     test.strictEqual(res.statusCode, 200);
+                    test.strictEqual(body, 'OK');
                 }).then(function(){
                     test.equal(errors.length, 1);
                     test.ok(errors[0] instanceof smsfw.errors.CreditError);
