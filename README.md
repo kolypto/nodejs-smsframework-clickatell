@@ -18,6 +18,8 @@ Config
 Sending Parameters
 ==================
 
+* `deliv_time: Number`: Delay the delivery for X minutes
+
 Receivers
 =========
 
